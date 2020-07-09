@@ -74,7 +74,7 @@ stages:
       vmImage: 'ubuntu-18.04'
     environment: dev
     variables:
-    - group: Release
+    - group: appServiceDeploy                                                     #Variable Group name
     strategy:
       runOnce:
         deploy:
@@ -84,6 +84,6 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Azure App Service Deploy: website'
             inputs:
-              azureSubscription: 'appServiceDeploy'
-              appName: '$(WebAppName)'
+              azureSubscription: 'appServiceDeploy'                               #Service Connection Name
+              appName: '$(WebAppName)'                                            #Azure Pipeline variable name pointing at Azure Service Name
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'

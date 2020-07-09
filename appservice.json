@@ -1,0 +1,79 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "runtimeStack": {
+            "type": "string",
+            "metadata": {
+                "description": "Runtime stack"
+            }
+        },
+        "appServiceName": {
+            "type": "string",
+            "metadata": {
+                "description": "App Service Name"
+            }
+        },
+        "appServicePlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "App Service Plan name"
+            }
+        },
+        "operatingSystem": {
+            "type": "string",
+            "metadata": {
+                "description": "App Service Plan operating system"
+            }
+        },
+        "skuTier": {
+            "type": "string",
+            "metadata": {
+                "description": "App Service Plan SKU Tier"
+            }
+        },
+        "skuCode": {
+            "type": "string",
+            "metadata": {
+                "description": "App Service Plan SKU Code"
+            }
+        }
+    },
+    "variables": {
+        "apiVersion": "2019-08-01",
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "[parameters('appServicePlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[variables('location')]",
+            "kind": "[parameters('operatingSystem')]",
+            "properties": {
+                "reserved": "[if(equals(parameters('operatingSystem'), 'linux'), 'true', 'false')]"
+            },
+            "sku": {
+                "Tier": "[parameters('skuTier')]",
+                "Name": "[parameters('skuCode')]"
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "[parameters('appServiceName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceid('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+            ],
+            "properties": {
+                "siteConfig": {
+                    "linuxFxVersion": "[parameters('runtimeStack')]",
+                    "alwaysOn": true
+                },
+                "serverFarmId": "[resourceid('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "clientAffinityEnabled": false
+            }
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServiceName": {
+            "value": "web-appservice9401"
+        },
+        "runtimeStack": {
+            "value": "DOTNETCORE|3.1"
+        },
+        "appServicePlanName": {
+            "value": "ASP-appServiceDeployment"
+        },
+        "operatingSystem": {
+            "value": "linux"
+        },
+        "skuTier": {
+            "value": "PremiumV2"
+        },
+        "skuCode": {
+            "value": "P1v2"
+        }
+    }
+}
